@@ -1,6 +1,5 @@
 import pandas as pd
-from nltk import word_tokenize, pos_tag
-from nltk.corpus import stopwords
+from nltk import word_tokenize
 # import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tensorflow.keras.layers import Dense, Flatten
@@ -19,13 +18,13 @@ y = df['sentiment']
 
 print(f"\nX:\n{X.head()}\ny:\n{y.head()}\n")
 
-example = X.iloc[1]
+tokenized_df = pd.DataFrame(columns=['text'])
 
-tokens = word_tokenize(example)
-stop_words = set(stopwords.words("english"))
+for row in X:
 
-tokens = [token for token in tokens if token not in string.punctuation and token not in stop_words]
-tokens = [re.sub(r'[^a-zA-Z]', '', token) for token in tokens if re.sub(r'[^a-zA-Z]', '', token)]
-
-processed_example = ''.join(tokens)
-print(processed_example)
+    tokens = word_tokenize(row)
+    tokens = [token for token in tokens if token not in string.punctuation]
+    tokens = [re.sub(r'[^a-zA-Z]', '', token) for token in tokens if re.sub(r'[^a-zA-Z]', '', token)]
+    tokenized_df.loc[len(tokenized_df)] = ''.join(tokens)
+    
+print(tokenized_df.head())
